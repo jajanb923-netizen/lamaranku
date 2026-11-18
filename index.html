@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LamaranKu — Surat Lamaran &amp; CV AI untuk Pekerja Pabrik</title>
+<meta name="description" content="LamaranKu membantu pekerja pabrik di Indonesia membuat surat lamaran kerja dan CV yang rapi dalam hitungan menit — dibantu AI (Firebase AI Logic + Gemini) atau template lokal. Gratis, tanpa akun, data tersimpan di perangkat Anda.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="css/styles.css">
+<script type="importmap">
+{
+  "imports": {
+    "firebase/app": "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js",
+    "firebase/ai": "https://www.gstatic.com/firebasejs/12.6.0/firebase-ai.js",
+    "firebase/app-check": "https://www.gstatic.com/firebasejs/12.6.0/firebase-app-check.js"
+  }
+}
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">✉️</span>
+    <div>
+      <h1>LamaranKu</h1>
+      <p class="tagline">Surat lamaran &amp; CV untuk pekerja pabrik — dibantu AI, gratis, tanpa akun</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <span id="aiStatus" class="chip chip-local" title="Sumber jawaban AI terakhir">AI: Mode template lokal</span>
+    <button id="btnDemo" class="btn btn-ghost" type="button">Isi contoh</button>
+    <button id="btnSave" class="btn btn-ghost" type="button">Simpan</button>
+    <button id="btnClear" class="btn btn-danger-ghost" type="button">Hapus data</button>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="form-col" aria-label="Formulir data">
+    <p class="hint">Isi data Anda sekali — AI akan menyusun surat lamaran dan CV yang rapi.
+      Data hanya tersimpan di perangkat Anda (localStorage), tidak dikirim ke server mana pun
+      kecuali ke layanan AI saat Anda menekan tombol buat.</p>
+
+    <form id="profileForm" autocomplete="on" novalidate>
+      <fieldset class="card">
+        <legend>1 · Data diri</legend>
+        <label>Nama lengkap
+          <input id="f-nama" type="text" placeholder="cth: Siti Rahmawati" required>
+        </label>
+        <div class="row">
+          <label>Tempat lahir
+            <input id="f-tempatLahir" type="text" placeholder="cth: Tangerang">
+          </label>
+          <label>Tanggal lahir
+            <input id="f-tglLahir" type="date">
+          </label>
+        </div>
+        <label>Alamat lengkap
+          <textarea id="f-alamat" rows="2" placeholder="Jalan, RT/RW, kelurahan, kecamatan, kota, kode pos"></textarea>
+        </label>
+        <div class="row">
+          <label>No. HP / WhatsApp
+            <input id="f-hp" type="tel" placeholder="cth: 081234567890">
+          </label>
+          <label>Email
+            <input id="f-email" type="email" placeholder="cth: nama@gmail.com">
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>2 · Pendidikan terakhir</legend>
+        <div class="row">
+          <label>Jenjang
+            <select id="f-jenjang">
+              <option value="SD">SD</option>
+              <option value="SMP">SMP</option>
+              <option value="SMA">SMA</option>
+              <option value="SMK" selected>SMK</option>
+              <option value="D1">D1</option>
+              <option value="D2">D2</option>
+              <option value="D3">D3</option>
+              <option value="S1">S1</option>
+            </select>
+          </label>
+          <label>Tahun lulus
+            <input id="f-tahunLulus" type="number" min="1980" max="2030" placeholder="cth: 2023">
+          </label>
+        </div>
+        <label>Nama sekolah / universitas
+          <input id="f-sekolah" type="text" placeholder="cth: SMK Negeri 2 Tangerang">
+        </label>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>3 · Pengalaman kerja <span class="legend-note">(boleh kosong — fresh graduate)</span></legend>
+        <div id="expList"></div>
+        <button id="btnAddExp" class="btn btn-ghost" type="button">+ Tambah pengalaman</button>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>4 · Keterampilan</legend>
+        <p class="small">Ketuk untuk memilih — keterampilan umum di pabrik:</p>
+        <div id="skillChips" class="chips" role="group" aria-label="Keterampilan umum"></div>
+        <label>Keterampilan lain (pisahkan dengan koma)
+          <input id="f-skillFree" type="text" placeholder="cth: mengoperasikan mesin bubut, bahasa Inggris dasar">
+        </label>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>5 · Lamaran yang dituju</legend>
+        <div class="row">
+          <label>Posisi yang dilamar
+            <input id="f-posisi" type="text" placeholder="cth: Operator Produksi" required>
+          </label>
+          <label>Kota perusahaan
+            <input id="f-kota" type="text" placeholder="cth: Tangerang">
+          </label>
+        </div>
+        <label>Nama perusahaan tujuan
+          <input id="f-perusahaan" type="text" placeholder="cth: PT Cahaya Elektronik Indonesia" required>
+        </label>
+        <div class="row">
+          <label>Tanggal surat
+            <input id="f-tglSurat" type="date">
+          </label>
+          <label>Sumber info lowongan
+            <input id="f-sumber" type="text" placeholder="cth: JobStreet / Instagram @loker.tangerang">
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>6 · Gaya surat</legend>
+        <div class="tones" role="radiogroup" aria-label="Gaya surat">
+          <label class="tone"><input type="radio" name="tone" value="formal" checked> <span><strong>Formal</strong><br><small>Baku dan sopan, standar HRD</small></span></label>
+          <label class="tone"><input type="radio" name="tone" value="fresh"> <span><strong>Fresh graduate</strong><br><small>Tanpa pengalaman — tonjolkan pendidikan &amp; kemauan belajar</small></span></label>
+          <label class="tone"><input type="radio" name="tone" value="exp"> <span><strong>Berpengalaman</strong><br><small>Tonjolkan pengalaman &amp; pencapaian kerja</small></span></label>
+        </div>
+      </fieldset>
+
+      <p id="formError" class="error" role="alert" hidden></p>
+      <button id="btnGenerate" class="btn btn-primary btn-big" type="submit">✨ Buat Surat &amp; CV dengan AI</button>
+      <p class="small center">Surat dan CV bisa diedit langsung di pratinjau sebelum disalin atau dicetak.</p>
+    </form>
+  </section>
+
+  <section class="preview-col" aria-label="Pratinjau hasil">
+    <div class="preview-head">
+      <h2>Hasil</h2>
+      <button id="btnPrint" class="btn btn-primary" type="button">🖨️ Cetak / Unduh PDF</button>
+    </div>
+
+    <article class="card output-card" id="letterCard">
+      <div class="output-head">
+        <h3>Surat Lamaran Kerja</h3>
+        <div class="output-actions">
+          <span id="letterBadge" class="chip chip-local">Belum dibuat</span>
+          <button class="btn btn-ghost btn-small" type="button" data-copy="letterOut">Salin</button>
+        </div>
+      </div>
+      <div id="letterOut" class="doc" contenteditable="true" spellcheck="false"
+        aria-label="Surat lamaran — bisa diedit langsung">Surat lamaran Anda akan muncul di sini setelah Anda mengisi data dan menekan “Buat Surat &amp; CV dengan AI”. Anda juga bisa menekan “Isi contoh” untuk melihat contoh lengkap.</div>
+    </article>
+
+    <article class="card output-card" id="cvCard">
+      <div class="output-head">
+        <h3>Curriculum Vitae (CV)</h3>
+        <div class="output-actions">
+          <span id="cvBadge" class="chip chip-local">Belum dibuat</span>
+          <button class="btn btn-ghost btn-small" type="button" data-copy="cvOut">Salin</button>
+        </div>
+      </div>
+      <div id="cvOut" class="doc" contenteditable="true" spellcheck="false"
+        aria-label="CV — bisa diedit langsung">CV Anda akan muncul di sini. CV disusun ringkas: data diri, pendidikan, pengalaman kerja, dan keterampilan — siap dicetak satu halaman.</div>
+    </article>
+
+    <p class="small print-note">Tips cetak: gunakan ukuran kertas A4. Surat lamaran tercetak di halaman 1, CV di halaman 2. Periksa kembali nama, tanggal, dan nama perusahaan sebelum mengirim.</p>
+  </section>
+</main>
+
+<footer class="footer">
+  <p><strong>LamaranKu</strong> — dibuat untuk SLAY HACKS 2026. Gratis, tanpa akun, data tersimpan di perangkat Anda.
+  AI memakai Firebase AI Logic (Gemini Nano di perangkat bila tersedia, Gemini Flash di cloud bila tidak) — bila layanan AI belum dikonfigurasi, aplikasi memakai template lokal yang tetap menghasilkan surat dan CV yang benar.</p>
+</footer>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+/* LamaranKu — mobile-first, no framework. Print CSS: A4, letter p.1, CV p.2. */
+:root {
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --ink: #1c2530;
+  --muted: #5b6b7a;
+  --line: #dbe3ea;
+  --accent: #0b6e4f;
+  --accent-dark: #085c42;
+  --accent-soft: #e3f2ec;
+  --warn: #8a5a00;
+  --warn-soft: #fff3d6;
+  --danger: #b3261e;
+  --radius: 12px;
+  --shadow: 0 1px 4px rgba(16, 36, 56, .10);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+}
+h1, h2, h3 { margin: 0; line-height: 1.25; }
+h1 { font-size: 1.45rem; }
+h2 { font-size: 1.2rem; }
+h3 { font-size: 1.05rem; }
+p { margin: .5em 0; }
+.small { font-size: .85rem; color: var(--muted); }
+.center { text-align: center; }
+.error {
+  color: var(--danger);
+  background: #fdecea;
+  border: 1px solid #f5c6c2;
+  border-radius: 8px;
+  padding: .6em .8em;
+  font-size: .92rem;
+}
+
+/* --- Top bar --- */
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: .9rem 1rem;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; gap: .7rem; align-items: center; min-width: 0; }
+.logo { font-size: 1.9rem; line-height: 1; }
+.tagline { margin: 0; color: var(--muted); font-size: .88rem; }
+.top-actions { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+
+/* --- Chips & buttons --- */
+.chip {
+  display: inline-block;
+  font-size: .8rem;
+  font-weight: 600;
+  padding: .28em .7em;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.chip-ai { background: var(--accent-soft); border-color: #bcdccf; color: var(--accent-dark); }
+.chip-local { background: var(--warn-soft); border-color: #ecd9a8; color: var(--warn); }
+.btn {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--ink);
+  padding: .55em 1em;
+}
+.btn:hover { border-color: #b9c6d2; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-dark); }
+.btn-ghost { background: var(--card); }
+.btn-danger-ghost { color: var(--danger); }
+.btn-big { width: 100%; padding: .85em 1em; font-size: 1.05rem; margin-top: .4rem; }
+.btn-small { padding: .35em .7em; font-size: .85rem; }
+.btn[disabled] { opacity: .55; cursor: wait; }
+
+/* --- Layout --- */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+@media (min-width: 960px) {
+  .layout { grid-template-columns: minmax(380px, 5fr) minmax(420px, 6fr); align-items: start; }
+  .form-col { position: sticky; top: 0; max-height: 100vh; overflow-y: auto; padding-right: .25rem; }
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+fieldset.card { border: 1px solid var(--line); }
+legend { font-weight: 700; padding: 0 .4em; }
+.legend-note { font-weight: 400; font-size: .82rem; color: var(--muted); }
+.hint { font-size: .92rem; color: var(--muted); margin: 0 0 1rem; }
+
+/* --- Form --- */
+label { display: block; font-weight: 600; font-size: .92rem; margin-bottom: .7rem; }
+label > input, label > select, label > textarea {
+  display: block;
+  width: 100%;
+  margin-top: .3rem;
+  font: inherit;
+  font-weight: 400;
+  padding: .55em .7em;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+}
+label > input:focus, label > select:focus, label > textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+.row { display: grid; grid-template-columns: 1fr; gap: 0 .8rem; }
+@media (min-width: 560px) { .row { grid-template-columns: 1fr 1fr; } }
+
+/* Experience rows */
+.exp-row {
+  border: 1px dashed var(--line);
+  border-radius: 9px;
+  padding: .8rem;
+  margin-bottom: .8rem;
+  background: #fbfcfd;
+}
+.exp-row .exp-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: .5rem; }
+.exp-row .exp-head strong { font-size: .92rem; }
+.btn-remove { background: none; border: none; color: var(--danger); cursor: pointer; font: inherit; font-size: .85rem; font-weight: 600; padding: .2em .4em; }
+
+/* Skill chips */
+.chips { display: flex; flex-wrap: wrap; gap: .45rem; margin: .2rem 0 .8rem; }
+.chip-btn {
+  font: inherit;
+  font-size: .88rem;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--ink);
+  padding: .4em .85em;
+}
+.chip-btn[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Tone selector */
+.tones { display: grid; gap: .6rem; }
+@media (min-width: 560px) { .tones { grid-template-columns: repeat(3, 1fr); } }
+.tone {
+  display: flex;
+  gap: .55rem;
+  align-items: flex-start;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: .7rem;
+  margin: 0;
+  cursor: pointer;
+  font-weight: 400;
+}
+.tone:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.tone input { margin-top: .25rem; accent-color: var(--accent); }
+.tone small { color: var(--muted); }
+
+/* --- Preview --- */
+.preview-head { display: flex; justify-content: space-between; align-items: center; gap: .8rem; margin-bottom: .8rem; flex-wrap: wrap; }
+.output-head { display: flex; justify-content: space-between; align-items: center; gap: .6rem; flex-wrap: wrap; margin-bottom: .6rem; }
+.output-actions { display: flex; gap: .45rem; align-items: center; }
+.doc {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: .98rem;
+  line-height: 1.65;
+  background: #fffef8;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.1rem 1.2rem;
+  min-height: 220px;
+  outline: none;
+}
+.doc:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.print-note { margin-top: .2rem; }
+
+.footer {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+/* --- Print: only the two documents, A4, letter p.1, CV p.2 --- */
+@media print {
+  body { background: #fff; }
+  .topbar, .form-col, .preview-head, .output-actions, .print-note, .footer { display: none !important; }
+  .layout { display: block; max-width: none; margin: 0; padding: 0; }
+  .preview-col { display: block; }
+  .output-card {
+    border: none; box-shadow: none; border-radius: 0; padding: 0; margin: 0;
+    page-break-after: always;
+  }
+  .output-card:last-child { page-break-after: auto; }
+  .output-head h3 { display: none; }
+  .doc {
+    border: none; border-radius: 0; padding: 0; min-height: 0;
+    font-size: 12pt; line-height: 1.6; background: #fff;
+  }
+  @page { size: A4; margin: 20mm 18mm; }
+}
